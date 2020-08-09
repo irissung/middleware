@@ -3,9 +3,16 @@ const app = express()
 const port = 3000
 
 app.use(function (req, res, next) {
-  const now = new Date()
-  const timestamp = now.toLocaleString()
-  console.log(timestamp + ' | ' + req.method + ' from ' + req.originalUrl);
+  //Q1：伺服器接收請求紀錄
+  const reqTime = Date.now()
+  const reqTimestamp = new Date().toLocaleString()
+  console.log(reqTimestamp + ' | ' + req.method + ' from ' + req.originalUrl);
+  //Q2：伺服器回應的時間
+  res.on('finish', function () {
+    const resTime = Date.now()
+    const totalTime = resTime - reqTime
+    console.log(`${reqTimestamp} | ${req.method} from ${req.originalUrl} | Total time ：${totalTime} ms.`)
+  })
   next();
 });
 
